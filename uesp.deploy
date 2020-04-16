@@ -1,0 +1,20 @@
+name = uesp.metamplate
+description = MediaWiki extension for the UESP wiki.
+repository = https://github.com/uesp/uesp.wikimetatemplate.git
+backup = true
+verbosity = 0
+
+	# Staging is important as the APC cache randomly breaks if you try to update the files in place.
+staged = true
+
+ignore = *.deploy
+ignore = .hg*
+ignore = .git*
+
+dest = content1.uesp.net:/home/uesp/www/w/extensions/MetaTemplate/
+dest = content2.uesp.net:/home/uesp/www/w/extensions/MetaTemplate/
+dest = content3.uesp.net:/home/uesp/www/w/extensions/MetaTemplate/
+
+rundeployfiles = false
+deployfile = dev:dev.deploy
+deployfile = backup:backup.deploy
