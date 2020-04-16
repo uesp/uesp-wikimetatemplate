@@ -1,6 +1,6 @@
 name = uesp.metamplate
 description = MediaWiki extension for the UESP wiki.
-repository = https://github.com/uesp/uesp.wikimetatemplate.git
+repository = https://github.com/uesp/uesp-wikimetatemplate.git
 backup = true
 verbosity = 0
 
