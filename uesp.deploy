@@ -15,6 +15,5 @@ dest = content1.uesp.net:/home/uesp/www/w/extensions/MetaTemplate/
 dest = content2.uesp.net:/home/uesp/www/w/extensions/MetaTemplate/
 dest = content3.uesp.net:/home/uesp/www/w/extensions/MetaTemplate/
 
-rundeployfiles = false
-deployfile = dev:dev.deploy
-deployfile = backup:backup.deploy
+destname = [backup]backup1.uesp.net:/home/uesp/www/w/extensions/MetaTemplate/
+destname = [dev]content3.uesp.net:/home/uesp/dev/www/w/extensions/MetaTemplate/

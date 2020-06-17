@@ -603,7 +603,8 @@ function efMetaTemplateImplementLoad(&$parser) {
 				$rev = Revision::NewFromId($chktitle->getLatestRevID());
 				$text = $rev->getText();
 				if( $text !== false )
-					$redirtitle = Title::newFromRedirect( $text );
+					//$redirtitle = Title::newFromRedirect( $text );	//Function no longer exists in 1.27
+					$redirtitle = Title::newFromText( $text );
 				if( is_object( $redirtitle ) ) {
 					$chktitle = $redirtitle;
 					if (!$chktitle->exists())
