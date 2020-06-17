@@ -695,10 +695,10 @@ function efMetaTemplateImplementListsaved(&$parser) {
 		return '<strong class="error">Listsaved error: Provided template, '.$template.', does not exist</strong>';
 	$rev = Revision::NewFromId($tpl->getLatestRevID());
 	$text = $rev->getText();
-	$maxlen = trim(wfMsgForContent('mt_listsaved_template_maxlen'));
+	$maxlen = trim(wfMessage('mt_listsaved_template_maxlen'));
 	if ($maxlen && strlen($text)>$maxlen)
 		return '<strong class="error">Listsaved error: Provided template, '.$template.', is longer than '.$maxlen.' bytes</strong>';
-	$disallowed = explode("\n", wfMsgForContent('mt_listsaved_template_disallowed'));
+	$disallowed = explode("\n", wfMessage('mt_listsaved_template_disallowed'));
 	foreach ($disallowed as $chkword) {
 		if ($chkword && strpos($text, $chkword)!==false)
 			return '<strong class="error">Listsaved error: Provided template, '.$template.', contains a disallowed word: '.$chkword.'</strong>';
