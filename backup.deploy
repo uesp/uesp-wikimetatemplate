@@ -1,9 +1,0 @@
-backup = true
-verbosity = 0
-staged = true
-
-ignore = *.deploy
-ignore = .hg*
-ignore = .git*
-
-dest = backup1.uesp.net:/home/uesp/www/w/extensions/MetaTemplate/
