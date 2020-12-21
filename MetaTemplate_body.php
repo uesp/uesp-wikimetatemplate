@@ -601,10 +601,8 @@ function efMetaTemplateImplementLoad(&$parser) {
 				// get here either if no rows found for original title OR if original title data was cleared
 			if ($i==0) {
 				$rev = Revision::NewFromId($chktitle->getLatestRevID());
-				$text = $rev->getText();
-				if( $text !== false )
-					//$redirtitle = Title::newFromRedirect( $text );	//Function no longer exists in 1.27
-					$redirtitle = Title::newFromText( $text );
+				$content = $rev->getContent();
+				$redirtitle = $content ? $content->getRedirectTarget() : null;
 				if( is_object( $redirtitle ) ) {
 					$chktitle = $redirtitle;
 					if (!$chktitle->exists())
