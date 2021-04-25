@@ -769,6 +769,7 @@ function efMetaTemplateImplementListsaved(&$parser) {
 					$setorder .= $setdata[$arg];
 				$setorder .= '_';
 			}
+			$setorder = trim($setorder, '_');
 			$calls[$setorder] = '';
 			foreach ($setdata as $varname => $value) {
 				$calls[$setorder] .= "|$varname=$value";
