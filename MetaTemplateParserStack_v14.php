@@ -54,11 +54,15 @@ class MetaTemplateParserStack {
 			$varname = (integer) $varname;
 		if ($currframe->getArgument($varname)!==false) {
 			if (is_int($varname)) {
-				$currframe->numberedArgs[$varname]->getFirstChild()->value = $value;
+				$child = $currframe->numberedArgs[$varname]->getFirstChild();
+				if ($child)
+					$child->value = $value;
 				$currframe->numberedExpansionCache[$varname] = $value;
 			}
 			else {
-				$currframe->namedArgs[$varname]->getFirstChild()->value = $value;
+				$child = $currframe->namedArgs[$varname]->getFirstChild();
+				if ($child)
+					$child->value = $value;
 				$currframe->namedExpansionCache[$varname] = $value;
 			}
 		}
