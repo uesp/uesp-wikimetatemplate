@@ -33,6 +33,9 @@ function efMetaTemplateBlank(&$parser) {
 	 return '';
 }
 
+// This didn't used to cause evaluation of all arguments to a function like
+// #define, #ifexistx, etc., but now it does. Probably needs re-written
+// using arg->splitArg() like the current version of #switch does.
 function efMetaTemplateProcessArgs($args, &$frame, &$matchcase, &$skip, &$subset=NULL) {
 	global $wgVersion;
 	if( version_compare( $wgVersion, '1.12.0', '>=')) {
@@ -1108,28 +1111,8 @@ function efMetaTemplateDisplayMode(&$parser, &$frame, $istemplate=true, $isprevi
 // code copied from ParserFunctions
 // copy of ifexist that does NOT add link to wanted pages
 // code that created links is commented out
-function efMetaTemplateIncrementIfexistCount( $parser, $frame ) {
-		// Don't let this be called more than a certain number of times. It tends to make the database explode.
-	global $wgExpensiveParserFunctionLimit;
-	$parser->mExpensiveFunctionCount++;
-	if ( $frame ) {
-		$pdbk = $frame->getPDBK( 1 );
-		if ( !isset( $parser->pf_ifexist_breakdown[$pdbk] ) ) {
-			$parser->pf_ifexist_breakdown[$pdbk] = 0;
-		}
-		$parser->pf_ifexist_breakdown[$pdbk] ++;
-	}
-	return $parser->mExpensiveFunctionCount <= $wgExpensiveParserFunctionLimit;
-}
-
-// Implementation of {{#ifexistx}} parser function
-function efMetaTemplateIfExist( &$parser ) {
+function efMetaTemplateIfexistCommon( $parser, $frame, $titletext = '', $then = '', $else = '' ) {
 	global $wgContLang;
-	$args = func_get_args();
-	array_shift($args);
-	$data = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
-	list($titletext, $then, $else) = array_pad($data, 3, '');
-	
 	$title = Title::newFromText( $titletext );
 	$wgContLang->findVariantLink( $titletext, $title, true );
 	if ( $title ) {
@@ -1151,7 +1134,7 @@ function efMetaTemplateIfExist( &$parser ) {
 				 * since their existence can be checked without
 				 * accessing the database.
 				 */
-			return SpecialPage::exists( $title->getDBkey() ) ? $then : $else;
+			return SpecialPageFactory::exists( $title->getDBkey() ) ? $then : $else;
 		} elseif( $title->isExternal() ) {
 				/* Can't check the existence of pages on other sites,
 				 * so just return $else.  Makes a sort of sense, since
@@ -1161,24 +1144,57 @@ function efMetaTemplateIfExist( &$parser ) {
 		} else {
 			$pdbk = $title->getPrefixedDBkey();
 			$lc = LinkCache::singleton();
-			if ( !efMetaTemplateIncrementIfexistCount( $parser, $frame ) ) {
-				return $else;
-			}
-			if ( 0 != ( $id = $lc->getGoodLinkID( $pdbk ) ) ) {
+			$id = $lc->getGoodLinkID( $pdbk );
+			if ( $id !== 0 ) {
 				//				$parser->mOutput->addLink( $title, $id );
 				return $then;
 			} elseif ( $lc->isBadLink( $pdbk ) ) {
 				//				$parser->mOutput->addLink( $title, 0 );
 				return $else;
 			}
-			$id = $title->getArticleID();
+			if ( !efMetaTemplateIncrementIfexistCount( $parser, $frame ) ) {
+				return $else;
+			}
+			//			$id = $title->getArticleID();
 			//			$parser->mOutput->addLink( $title, $id );
-			if ( $id ) {
+
+			if ( $title->exists() ) {
 				return $then;
 			}
 		}
 	}
 	return $else;
+}
+
+function efMetaTemplateIncrementIfexistCount( $parser, $frame ) {
+		// Don't let this be called more than a certain number of times. It tends to make the database explode.
+	global $wgExpensiveParserFunctionLimit;
+	$parser->mExpensiveFunctionCount++;
+	if ( $frame ) {
+		$pdbk = $frame->getPDBK( 1 );
+		if ( !isset( $parser->pf_ifexist_breakdown[$pdbk] ) ) {
+			$parser->pf_ifexist_breakdown[$pdbk] = 0;
+		}
+		$parser->pf_ifexist_breakdown[$pdbk] ++;
+	}
+	return $parser->mExpensiveFunctionCount <= $wgExpensiveParserFunctionLimit;
+}
+
+// Implementation of {{#ifexistx}} parser function
+function efMetaTemplateIfExist( &$parser ) {
+	$args = func_get_args();
+	$frame = $args[1];
+	$args = $args[2];
+	$title = isset( $args[0] ) ? trim( $frame->expand( $args[0] ) ) : '';
+	$then = isset( $args[1] ) ? $args[1] : null;
+	$else = isset( $args[2] ) ? $args[2] : null;
+
+	$result = efMetaTemplateIfexistCommon( $parser, $frame, $title, $then, $else );
+	if ( $result === null ) {
+		return '';
+	} else {
+		return trim( $frame->expand( $result ) );
+	}
 }
 
 // Dynamic function
