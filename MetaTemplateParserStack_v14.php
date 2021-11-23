@@ -1,4 +1,5 @@
 <?php
+
 // group of functions to manipulate parser argument stack
 class MetaTemplateParserStack {
 	protected $_parser;
@@ -14,6 +15,26 @@ class MetaTemplateParserStack {
 		$this->_frame = &$frame;
 		$this->_stackcount = $frame->depth;
 	}
+	
+		// Needed for MW 1.28
+ 	public static function newWithText( $name, $text ) {
+ 		if (method_exists("PPNode_Hash_Tree", "addChild"))
+ 		{
+			$obj = new PPNode_Hash_Tree( $name );
+			$obj->addChild( new PPNode_Hash_Text( $text ) );
+			return $obj;
+ 		}
+ 		
+ 		$store = [ [ 'part', [
+				[ 'name', [ strval( $name ) ] ],
+				'=',
+				[ 'value', [ strval( $text ) ] ],
+			] ] ];
+ 		
+ 		$obj = new PPNode_Hash_Tree( $store, 0 );
+ 		return $obj;
+	}
+	
 	
 	function get_stackcount() {
 		return $this->_stackcount;
@@ -67,7 +88,7 @@ class MetaTemplateParserStack {
 			}
 		}
 		else {
-			$element = PPNode_Hash_Tree::newWithText( 'value', $value );
+			$element = self::newWithText( 'value', $value );
 			if (is_int($varname)) {
 				$currframe->numberedArgs[$varname] = $element;
 				$currframe->numberedExpansionCache[$varname] = $value;
