@@ -18,7 +18,11 @@ class MetaTemplateParserStack {
 	
 		// Needed for MW 1.28
  	public static function newWithText( $name, $text ) {
- 		if (method_exists("PPNode_Hash_Tree", "addChild"))
+ 		if (method_exists("PPNode_Hash_Tree", "newWithText"))
+ 		{
+ 			return PPNode_Hash_Tree::newWithText($name, $text);
+ 		}
+ 		else if (method_exists("PPNode_Hash_Tree", "addChild"))
  		{
 			$obj = new PPNode_Hash_Tree( $name );
 			$obj->addChild( new PPNode_Hash_Text( $text ) );
@@ -89,6 +93,7 @@ class MetaTemplateParserStack {
 		}
 		else {
 			$element = self::newWithText( 'value', $value );
+			//$element = PPNode_Hash_Tree::newWithText( 'value', $value );
 			if (is_int($varname)) {
 				$currframe->numberedArgs[$varname] = $element;
 				$currframe->numberedExpansionCache[$varname] = $value;
