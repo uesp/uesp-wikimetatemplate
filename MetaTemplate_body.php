@@ -421,7 +421,7 @@ function efMetaTemplateImplementPickfrom(&$parser, $npick) {
 			$seed = (int) $matches[1];
 		elseif (preg_match('/^\s*separator\s*=(.*)/', $arg, $matches)) {
 			$separator = stripcslashes($matches[1]);
-			if (strlen($separator)>1 && $separator{0}==substr($separator,-1,1) && ($separator{0} == '\'' || $separator{0} == '"'))
+			if (strlen($separator)>1 && $separator[0]==substr($separator,-1,1) && ($separator[0] == '\'' || $separator[0] == '"'))
 				$separator = substr($separator,1,-1);
 		}
 		else

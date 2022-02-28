@@ -134,6 +134,12 @@ $wgSpecialPageGroups[ 'MetaVarsOnPage' ] = 'wiki';
  * Initialization functions
  */
 
+/* Fix for change in constant names in 1.30 */
+if (!defined('DB_SLAVE'))
+{
+	define('DB_SLAVE', DB_REPLICA);
+}
+
 # This function is called as soon as setup is done
 # Loads extension messages and does some other initialization that can be safely moved out of global
 function efMetaTemplateInit( Parser $parser ) {
