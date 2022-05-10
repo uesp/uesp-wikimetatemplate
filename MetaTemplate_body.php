@@ -310,7 +310,10 @@ function efMetaTemplateImplementSplitargs(&$parser) {
 			}
 		}
 	}
-	return array($output, 'noparse' => false);
+
+	$output = $parser->preprocessToDom($output);
+	$output = $frame->expand($output);
+	return $output;
 }
 
 // Implementation of {{#Explodeargs}} parser function
@@ -405,7 +408,10 @@ function efMetaTemplateImplementExplodeargs(&$parser) {
 			$output .= '{{' . $pagename . $currargs . $nonnum . '}}';
 		}
 	}
-	return array($output, 'noparse' => false);
+
+	$output = $parser->preprocessToDom($output);
+	$output = $frame->expand($output);
+	return $output;
 }
 
 // Implementation of {{#pickfrom}} parser function
