@@ -79,6 +79,7 @@ function efMetaTemplateProcessArgs($args, &$frame, &$matchcase, &$skip, &$subset
 // Implementation of {{#define}} parser function
 // don't want to skip ns_base or ns_id definition...
 function efMetaTemplateImplementDefine(&$parser) {
+	$parser->addTrackingCategory('mttc-varset');
 	$args = func_get_args();
 	array_shift($args);
 	$data = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
@@ -94,6 +95,7 @@ function efMetaTemplateImplementDefine(&$parser) {
 // Implementation of ((#preview}} parser function
 // (only difference from #define is when it gets activated)
 function efMetaTemplateImplementPreview(&$parser) {
+	$parser->addTrackingCategory('mttc-varset');
 	$args = func_get_args();
 	array_shift($args);
 	$data = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
@@ -111,6 +113,7 @@ function efMetaTemplateImplementPreview(&$parser) {
 // Implementation of ((#local}} parser function
 // (only difference from #define is in the parameters to SharedDefine)
 function efMetaTemplateImplementLocal(&$parser) {
+	$parser->addTrackingCategory('mttc-varset');
 	$args = func_get_args();
 	array_shift($args);
 	$data = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
@@ -143,6 +146,8 @@ function efMetaTemplateSharedDefine(&$parser, $frame, $matchcase, $data, $allowo
 
 // Implementation of ((#unset}} parser function
 function efMetaTemplateImplementUnset(&$parser) {
+	$parser->addTrackingCategory('mttc-varset');
+	$parser->addTrackingCategory('mttc-stack');
 	$args = func_get_args();
 	array_shift($args);
 	$varnames = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
@@ -157,6 +162,8 @@ function efMetaTemplateImplementUnset(&$parser) {
 
 // Implementation of {{#return}} parser function
 function efMetaTemplateImplementReturn(&$parser) {
+	$parser->addTrackingCategory('mttc-varset');
+	$parser->addTrackingCategory('mttc-stack');
 	$args = func_get_args();
 	array_shift($args);
 	$varnames = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
@@ -176,6 +183,7 @@ function efMetaTemplateImplementReturn(&$parser) {
 
 // Implementation of {{#inherit}} parser function
 function efMetaTemplateImplementInherit(&$parser) {
+	$parser->addTrackingCategory('mttc-varset');
 	$args = func_get_args();
 	array_shift($args);
 	$varnames = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
@@ -195,6 +203,7 @@ function efMetaTemplateImplementInherit(&$parser) {
 
 // Implementation of {{#include}} parser function
 function efMetaTemplateImplementInclude(&$parser) {
+	$parser->addTrackingCategory('mttc-include');
 	$args = func_get_args();
 	array_shift($args);
 	$pagenames = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
@@ -214,6 +223,7 @@ function efMetaTemplateImplementInclude(&$parser) {
 
 // Implementation of {{#splitargs}} parser function
 function efMetaTemplateImplementSplitargs(&$parser) {
+	$parser->addTrackingCategory('mttc-args');
 	global $wgVersion;
 	if( version_compare( $wgVersion, '1.12.0', '>=')) {
 		$frame = func_get_arg(1);
@@ -318,6 +328,7 @@ function efMetaTemplateImplementSplitargs(&$parser) {
 
 // Implementation of {{#Explodeargs}} parser function
 function efMetaTemplateImplementExplodeargs(&$parser) {
+	$parser->addTrackingCategory('mttc-args');
 	global $wgVersion;
 
 	if( version_compare( $wgVersion, '1.12.0', '>=')) {
@@ -458,7 +469,7 @@ function efMetaTemplateImplementTrimlinks(&$parser, $text) {
 
 // Implementation of {{#save}} parser function
 function efMetaTemplateImplementSave(&$parser) {
-
+	$parser->addTrackingCategory('mttc-data');
         if ( wfReadOnly() ) return '';
 
 	// process before deciding whether to truly proceed, so that nowiki tags are previewed properly
@@ -500,6 +511,7 @@ function efMetaTemplateImplementSave(&$parser) {
 
 // Implementation of {{#load}} parser function
 function efMetaTemplateImplementLoad(&$parser) {
+	$parser->addTrackingCategory('mttc-data');
 	$args = func_get_args();
 	array_shift($args);
 	$data = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip, $subset);
@@ -653,6 +665,7 @@ function efMetaTemplateImplementLoad(&$parser) {
 // Implementation of {{#listsaved}} parser function
 // To make this work efficiently, need to add index to mt_save_data
 function efMetaTemplateImplementListsaved(&$parser) {
+	$parser->addTrackingCategory('mttc-listsaved');
 	// don't use standard ProcessArgs here because this routine needs special processing
 	global $wgVersion;
 	if( version_compare( $wgVersion, '1.12.0', '>=')) {
@@ -817,6 +830,7 @@ function efMetaTemplateImplementListsaved(&$parser) {
 }
 
 function efMetaTemplateImplementNestlevel(&$parser, $frame) {
+	$parser->addTrackingCategory('mttc-stack');
 	$pstack = new MetaTemplateParserStack($parser, $frame);
 	
 	if ($pstack->get_stackcount()<0 || is_null($value=$pstack->get('nestlevel')))
@@ -826,16 +840,19 @@ function efMetaTemplateImplementNestlevel(&$parser, $frame) {
 }
 
 function efMetaTemplateImplementNamespacex(&$parser) {
+	$parser->addTrackingCategory('mttc-stack');
 	$args = func_get_args();
 	array_shift($args);
 	return efMetaTemplatePreprocessTemplateName($parser, $args, 'NAMESPACE0');
 }
 function efMetaTemplateImplementPagenamex(&$parser) {
+	$parser->addTrackingCategory('mttc-stack');
 	$args = func_get_args();
 	array_shift($args);
 	return efMetaTemplatePreprocessTemplateName($parser, $args, 'PAGENAME0');
 }
 function efMetaTemplateImplementFullpagenamex(&$parser) {
+	$parser->addTrackingCategory('mttc-stack');
 	$args = func_get_args();
 	array_shift($args);
 	return efMetaTemplatePreprocessTemplateName($parser, $args, 'FULLPAGENAME0');
