@@ -147,7 +147,6 @@ function efMetaTemplateSharedDefine(&$parser, $frame, $matchcase, $data, $allowo
 // Implementation of ((#unset}} parser function
 function efMetaTemplateImplementUnset(&$parser) {
 	$parser->addTrackingCategory('mttc-varset');
-	$parser->addTrackingCategory('mttc-stack');
 	$args = func_get_args();
 	array_shift($args);
 	$varnames = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
@@ -184,6 +183,7 @@ function efMetaTemplateImplementReturn(&$parser) {
 // Implementation of {{#inherit}} parser function
 function efMetaTemplateImplementInherit(&$parser) {
 	$parser->addTrackingCategory('mttc-varset');
+	$parser->addTrackingCategory('mttc-stack');
 	$args = func_get_args();
 	array_shift($args);
 	$varnames = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
@@ -665,6 +665,7 @@ function efMetaTemplateImplementLoad(&$parser) {
 // Implementation of {{#listsaved}} parser function
 // To make this work efficiently, need to add index to mt_save_data
 function efMetaTemplateImplementListsaved(&$parser) {
+	$parser->addTrackingCategory('mttc-data');
 	$parser->addTrackingCategory('mttc-listsaved');
 	// don't use standard ProcessArgs here because this routine needs special processing
 	global $wgVersion;
