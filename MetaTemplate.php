@@ -193,7 +193,7 @@ function efMetaTemplateInit( Parser $parser ) {
 	$parser->setFunctionHook( MAG_METATEMPLATE_INHERIT, 'efMetaTemplateImplementInherit', $hookoption);
 	$parser->setFunctionHook( MAG_METATEMPLATE_RETURN, 'efMetaTemplateImplementReturn', $hookoption);
 	$parser->setFunctionHook( MAG_METATEMPLATE_LOCAL, 'efMetaTemplateImplementLocal', $hookoption);
-	$parser->setFunctionHook( MAG_METATEMPLATE_IFEXISTX, 'efMetaTemplateIfExist', $hookoption);
+	# $parser->setFunctionHook( MAG_METATEMPLATE_IFEXISTX, 'efMetaTemplateIfExist', $hookoption);
 	
 	if ($egMetaTemplateEnableSaveLoad) {
 		$parser->setFunctionHook( MAG_METATEMPLATE_SAVE, 'efMetaTemplateImplementSave', $hookoption);
@@ -209,23 +209,23 @@ function efMetaTemplateInit( Parser $parser ) {
 	$parser->setFunctionHook( MAG_METATEMPLATE_PAGENAMEx, 'efMetaTemplateImplementPagenamex', SFH_NO_HASH | $hookoption );
 	$parser->setFunctionHook( MAG_METATEMPLATE_FULLPAGENAMEx, 'efMetaTemplateImplementFullpagenamex', SFH_NO_HASH | $hookoption );
 	
-	$parser->setFunctionHook( MAG_METATEMPLATE_SPLITARGS, 'efMetaTemplateImplementSplitargs', $hookoption);
+#	$parser->setFunctionHook( MAG_METATEMPLATE_SPLITARGS, 'efMetaTemplateImplementSplitargs', $hookoption);
 // explodeargs and include do not access parser stack, but still need frame (to expand templates)
-	$parser->setFunctionHook( MAG_METATEMPLATE_EXPLODEARGS, 'efMetaTemplateImplementExplodeargs', $hookoption );
-	$parser->setFunctionHook( MAG_METATEMPLATE_INCLUDE, 'efMetaTemplateImplementInclude', $hookoption );
+#	$parser->setFunctionHook( MAG_METATEMPLATE_EXPLODEARGS, 'efMetaTemplateImplementExplodeargs', $hookoption );
+#	$parser->setFunctionHook( MAG_METATEMPLATE_INCLUDE, 'efMetaTemplateImplementInclude', $hookoption );
 // these functions do not access parser stack and therefore can use old-style hook arguments
-	$parser->setFunctionHook( MAG_METATEMPLATE_PICKFROM, 'efMetaTemplateImplementPickfrom' );
-	$parser->setFunctionHook( MAG_METATEMPLATE_TRIMLINKS, 'efMetaTemplateImplementTrimlinks');
+#	$parser->setFunctionHook( MAG_METATEMPLATE_PICKFROM, 'efMetaTemplateImplementPickfrom' );
+#	$parser->setFunctionHook( MAG_METATEMPLATE_TRIMLINKS, 'efMetaTemplateImplementTrimlinks');
 		
 		// Tag function hooks
-	$parser->setHook( MAG_METATEMPLATE_DISPLAYCODE, 'efMetaTemplateDisplaycode' );
-	$parser->setHook( MAG_METATEMPLATE_CLEANSPACE, 'efMetaTemplateCleanspace' );
-	$parser->setHook( MAG_METATEMPLATE_CLEANTABLE, 'efMetaTemplateCleantable' );
+#	$parser->setHook( MAG_METATEMPLATE_DISPLAYCODE, 'efMetaTemplateDisplaycode' );
+#	$parser->setHook( MAG_METATEMPLATE_CLEANSPACE, 'efMetaTemplateCleanspace' );
+#	$parser->setHook( MAG_METATEMPLATE_CLEANTABLE, 'efMetaTemplateCleantable' );
 	
 		// Dynamic functions
-	$parser->setFunctionHook( MAG_METATEMPLATE_ARG, 'efMetaTemplateArg' );
-	$parser->setFunctionHook( MAG_METATEMPLATE_RAND, 'efMetaTemplateRand' );
-	$parser->setFunctionHook( MAG_METATEMPLATE_SKIN, 'efMetaTemplateSkin' );
+#	$parser->setFunctionHook( MAG_METATEMPLATE_ARG, 'efMetaTemplateArg' );
+#	$parser->setFunctionHook( MAG_METATEMPLATE_RAND, 'efMetaTemplateRand' );
+#	$parser->setFunctionHook( MAG_METATEMPLATE_SKIN, 'efMetaTemplateSkin' );
 	
 	global $egMetaTemplateEnableCatPageTemplate;
 	
