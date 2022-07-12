@@ -714,8 +714,8 @@ function efMetaTemplateImplementListsaved(&$parser) {
 	$tpl = Title::newFromText($template, NS_TEMPLATE);
 	if (!$tpl || !$tpl->exists())
 		return '<strong class="error">Listsaved error: Provided template, '.$template.', does not exist</strong>';
-	$rev = Revision::NewFromId($tpl->getLatestRevID());
-	$text = $rev->getText();
+	$rev = Revision::newFromTitle($tpl);
+	$text = $rev->getContent(Revision::FOR_PUBLIC);
 	$maxlen = trim(wfMessage('mt_listsaved_template_maxlen')->text());
 	if ($maxlen && strlen($text)>$maxlen)
 		return '<strong class="error">Listsaved error: Provided template, '.$template.', is longer than '.$maxlen.' bytes</strong>';
