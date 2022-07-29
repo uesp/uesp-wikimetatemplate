@@ -601,9 +601,11 @@ function efMetaTemplateImplementLoad(&$parser) {
 						if( array_key_exists( $row['mt_save_varname'], $toget ) ) {
 		// I've already filtered out variables that have been set
 							$value = $row['mt_save_value'];
-							if (!$row['mt_save_parsed'])
+							if (!$row['mt_save_parsed']) {
 								$value = $parser->preprocessToDom($value);
 								$value = $frame->expand($value, 0);
+							}
+
 							$pstack->set( $value, $row['mt_save_varname'] );
 						}
 					}
