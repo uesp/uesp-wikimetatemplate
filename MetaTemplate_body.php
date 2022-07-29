@@ -602,7 +602,8 @@ function efMetaTemplateImplementLoad(&$parser) {
 		// I've already filtered out variables that have been set
 							$value = $row['mt_save_value'];
 							if (!$row['mt_save_parsed'])
-								$value = efMetaTemplateTagParse( $value, $parser, $frame );
+								$value = $parser->preprocessToDom($value);
+								$value = $frame->expand($value, 0);
 							$pstack->set( $value, $row['mt_save_varname'] );
 						}
 					}
