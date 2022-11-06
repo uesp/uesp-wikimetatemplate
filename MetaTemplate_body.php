@@ -119,9 +119,6 @@ function efMetaTemplateImplementLocal(&$parser) {
 	$data = efMetaTemplateProcessArgs($args, $frame, $matchcase, $skip);
 	if( $skip )
 		return '';
-	// matchcase is always true for local
-	if( efMetaTemplateDisplayMode( $parser, $frame ) )
-		return '';
 	efMetaTemplateSharedDefine($parser, $frame, true, $data, false);
 	return '';
 }
